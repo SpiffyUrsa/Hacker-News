@@ -45,3 +45,26 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/*
+  Handles a new story submission. Creates a new story object with the input values and adding it
+  to the story list. 
+*/
+async function handleNewStorySubmit(event) {
+  console.debug("handleNewStorySubmit", event);
+  event.preventDefault();
+  const author = $("#new-story-author").val();
+  const title = $("#new-story-title").val();
+  const url = $("#new-story-url").val();
+
+  let newStory = {author, title, url};
+  newStory = new Story(newStory);
+  // adds the newStory to the storyList.
+  await storyList.addStory(currentUser, newStory);
+  // Updates the stories on page without refreshing.
+  putStoriesOnPage();
+  $newStoryForm.hide();
+  $newStoryForm.trigger("reset");
+}
+
+$newStoryForm.on("submit", handleNewStorySubmit);

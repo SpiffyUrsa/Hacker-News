@@ -32,7 +32,11 @@ $navLogin.on("click", navLoginClick);
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
   $(".main-nav-links").show();
+  $("#add-story").show();
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
+
+// When the Submit link is clicked, shows the add new story submit form.
+$("#add-story").on("click", function() {$newStoryForm.show();});

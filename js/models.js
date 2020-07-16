@@ -25,11 +25,15 @@ class Story {
 
   /** Parses hostname out of URL and returns it. */
 
+// Access the this.url inside of the Story instance and pass it through the new URL constructor. 
+// Call the hostname method on the new URL constructor to return the hostname.
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    return new URL(this.url).hostname;
   }
 }
+
+// Access the this.url inside of the Story instance and pass it through the new URL constructor. 
+// Call the hostname method on the new URL constructor to return the hostname.
 
 
 /******************************************************************************
@@ -73,11 +77,24 @@ class StoryList {
    * Returns the new story object
    */
 
-  async addStory( /* user, newStory */ ) {
-    // UNIMPLEMENTED: complete this function!
+  async addStory(user, newStory) {
+    // Add the newStory object into the API with the user's identification(token) using a POST request.
+    const addStoryResponse = await axios.post(`${BASE_URL}/stories`, {
+      token: user.loginToken, 
+      story: {
+        author: newStory.author,
+        title: newStory.title,
+        url: newStory.url
+      }
+    });
+    // Make a new Story instance with the updated newStory info includes user data.
+    newStory = new Story(addStoryResponse.data.story);
+    // Add the new story into the story list.
+    this.stories.unshift(newStory);
+    // return that new Story instance. 
+    return newStory;
   }
 }
-
 
 /******************************************************************************
  * The User class to primarily represent the current user.
