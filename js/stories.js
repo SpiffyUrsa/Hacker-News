@@ -124,6 +124,7 @@ async function toggleFavoriteStory(event){
     $starFavorite.removeClass("far");
     $starFavorite.addClass("fas"); 
     await currentUser.addFavoriteStory(storyObj);
+    // putFavoriteStoryOnPage();
   }else{
     $starFavorite.removeClass("fas");
     $starFavorite.addClass("far");
