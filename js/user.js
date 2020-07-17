@@ -118,5 +118,6 @@ function updateUIOnUserLogin() {
 
   hidePageComponents();
   $allStoriesList.show();
+  // Show favorite story only when logged in
   updateNavOnLogin();
 }

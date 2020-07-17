@@ -33,6 +33,7 @@ function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
   $(".main-nav-links").show();
   $("#add-story").show();
+  $navFavoriteStories.show();
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
@@ -40,3 +41,13 @@ function updateNavOnLogin() {
 
 // When the Submit link is clicked, shows the add new story submit form.
 $("#add-story").on("click", function() {$newStoryForm.show();});
+
+
+/** Show user's favorited stories list once Favorites tab is click. */
+function navFavoriteClicked(evt){
+  console.debug("navFavoriteClicked", evt);
+  hidePageComponents();
+  putFavoriteStoryOnPage();
+}
+
+$navFavoriteStories.on("click", navFavoriteClicked);

@@ -172,4 +172,38 @@ class User {
 
     return new User(response.data.user, token);
   }
+
+
+  /** Add new favorited story to user favorites' array, 
+   * and update API with new favorited data.
+  */
+
+  async addFavoriteStory(storyObj){
+    console.debug("storyObj", storyObj)
+    // Add to userFavoriteStoryArray 
+    this.favorites.push(storyObj);
+
+    // Update API with new favorited story
+    await axios.post(
+      `${BASE_URL}/users/${this.username}/favorites/${storyObj.storyId}`, 
+      {token: this.loginToken});
+
+  }
+
+
+  /** Remove un-favorited story from user's favoriteStory list */
+  async removeFavoriteStory(storyObj){
+    console.debug("storyObj", storyObj);
+    //Find storyObj in favoriteStory array and remove
+    
+    this.favorites = (this.favorites.filter(story => { 
+      return story.storyId !== storyObj.storyId}));
+    
+    // console.log('this.favorites', this.favorites);
+    // Update un-favorite story in API
+    await axios.delete(
+      `${BASE_URL}/users/${this.username}/favorites/${storyObj.storyId}`, 
+      {params: {token: this.loginToken}});
+   
+  }
 }
