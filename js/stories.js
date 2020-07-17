@@ -3,7 +3,6 @@
 // This is the global list of the stories, an instance of StoryList
 let storyList;
 
-
 /**
  * A render method to render HTML for an individual Story instance
  * - story: an instance of Story
@@ -14,11 +13,9 @@ let storyList;
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
   const hostName = story.getHostName();
+  
   let starType = changeStarType(story);
 
-  //can we find if that story is inside of fav array
-  //if yes, starType = "fas" else "far"
-  // render all the rest of the story markup
   return $(`
       <li id="${story.storyId}">
         <a class="favorited-star" >
@@ -34,17 +31,15 @@ function generateStoryMarkup(story) {
     `);
 }
 
-/** Replace starType based on storyid matches. */
+/** Replace starType based on whether the story ID is found in the user's favorites */
 function changeStarType(story){
-  const favoriteStorieslist = currentUser.favorites;
-    //check if one of the fav stories === story.storyId
-  
-  if (favoriteStorieslist.some(favoriteStory => favoriteStory.storyId === story.storyId)){
+  const favoriteStoriesList = currentUser.favorites;
+  //check if one of the fav stories === story.storyId
+  if (favoriteStoriesList.some(favoriteStory => favoriteStory.storyId === story.storyId)){
     return "fas";
   }else {
     return "far";
   }
-
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
@@ -60,7 +55,6 @@ function putStoriesOnPage() {
     const markup = generateStoryMarkup(story);
     $allStoriesList.append(markup);
   }
-
   $allStoriesList.show();
 }
 
@@ -100,7 +94,6 @@ function putFavoriteStoryOnPage(){
     const markup = generateStoryMarkup(favoriteStory);
     $favoritedStoriesList.append(markup);
   });
-
   $favoritedStoriesList.show();
 }
 
@@ -129,16 +122,10 @@ async function toggleFavoriteStory(event){
     $starFavorite.removeClass("fas");
     $starFavorite.addClass("far");
     await currentUser.removeFavoriteStory(storyObj);
-    console.log('storyobj', storyObj);
     putFavoriteStoryOnPage();
   }
-  // update Favorites list
-  
 }
 
-// <a class="favorited-star" >
-//   <i class="far fa-star" ></i>
-// listen on ol - favorite story, if there's a click of closet child then 
 $allStoriesList.on("click", ".favorited-star", toggleFavoriteStory);
 $favoritedStoriesList.on("click", ".favorited-star", toggleFavoriteStory);
 

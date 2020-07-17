@@ -199,7 +199,6 @@ class User {
     this.favorites = (this.favorites.filter(story => { 
       return story.storyId !== storyObj.storyId}));
     
-    // console.log('this.favorites', this.favorites);
     // Update un-favorite story in API
     await axios.delete(
       `${BASE_URL}/users/${this.username}/favorites/${storyObj.storyId}`, 
