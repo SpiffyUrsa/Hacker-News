@@ -33,9 +33,7 @@ function generateStoryMarkup(story) {
 
 /** Replace starType based on whether the story ID is found in the user's favorites */
 function changeStarType(story){
-  const favoriteStoriesList = currentUser.favorites;
-  //check if one of the fav stories === story.storyId
-  if (favoriteStoriesList.some(favoriteStory => favoriteStory.storyId === story.storyId)){
+  if (currentUser.isFavorite(story)){
     return "fas";
   }else {
     return "far";
@@ -81,7 +79,6 @@ async function handleNewStorySubmit(event) {
 
 $newStoryForm.on("submit", handleNewStorySubmit);
 
-
 /**Get user's favorite story from server, and update HTML */
 function putFavoriteStoryOnPage(){
   console.debug("putFavoriteStoryOnPage", putFavoriteStoryOnPage);
@@ -112,13 +109,13 @@ async function toggleFavoriteStory(event){
   const storyObj = storyList.stories.find(story => story.storyId === $liStoryId);
   const $starFavorite = $(event.target).closest("i");
 
-  console.log('toogleFavoriteStory storyobj', storyObj);
+  console.log('toogleFavoriteStory input', storyObj);
   if ($starFavorite.hasClass("far")){
     $starFavorite.removeClass("far");
     $starFavorite.addClass("fas"); 
     await currentUser.addFavoriteStory(storyObj);
     putFavoriteStoryOnPage();
-  }else{
+  } else {
     $starFavorite.removeClass("fas");
     $starFavorite.addClass("far");
     await currentUser.removeFavoriteStory(storyObj);
@@ -128,18 +125,3 @@ async function toggleFavoriteStory(event){
 
 $allStoriesList.on("click", ".favorited-star", toggleFavoriteStory);
 $favoritedStoriesList.on("click", ".favorited-star", toggleFavoriteStory);
-
-
-// tasks: 
-// DONE make checkbox (star shape for favorite stories) 
-// DONE as a list item is made, we still attach star in html (generate story markup())
-// DONE create a favorite tab left nav bar
-
-// once they star a story, 
-// add that to the favorites tab, show favorite stories in favorite tab
-// unstar in remove from favorite list
-
-// Add api call to favorite...method tells the server this is favorite
-
-// addEventLister to toggle click to remove stories, remove obj from array
-// $favoriteStories = $("#favorite-stories");

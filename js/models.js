@@ -10,17 +10,17 @@ const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
 class Story {
 
   /** The constructor takes an object for better readability / flexibility
-   * - storyObj: an object that has story properties in it
+   * - story: an object that has story properties in it
    */
 
-  constructor(storyObj) {
-    this.author = storyObj.author;
-    this.title = storyObj.title;
-    this.url = storyObj.url;
-    this.username = storyObj.username;
-    this.storyId = storyObj.storyId;
-    this.createdAt = storyObj.createdAt;
-    this.updatedAt = storyObj.updatedAt;
+  constructor(story) {
+    this.author = story.author;
+    this.title = story.title;
+    this.url = story.url;
+    this.username = story.username;
+    this.storyId = story.storyId;
+    this.createdAt = story.createdAt;
+    this.updatedAt = story.updatedAt;
   }
 
   /** Parses hostname out of URL and returns it. */
@@ -176,33 +176,38 @@ class User {
 
   /** Add new favorited story to user favorites' array, 
    * and update API with new favorited data.
+   * TODO: What is the story? (instance or a POJO?)
   */
 
-  async addFavoriteStory(storyObj){
-    console.debug("storyObj", storyObj)
+  async addFavoriteStory(story){
+    console.debug("addFavoriteStory input", story)
     // Add to userFavoriteStoryArray 
-    this.favorites.push(storyObj);
+    this.favorites.push(story);
 
     // Update API with new favorited story
     await axios.post(
-      `${BASE_URL}/users/${this.username}/favorites/${storyObj.storyId}`, 
+      `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`, 
       {token: this.loginToken});
 
   }
 
-
+//TODO: change argument name.
   /** Remove un-favorited story from user's favoriteStory list */
-  async removeFavoriteStory(storyObj){
-    console.debug("storyObj", storyObj);
-    //Find storyObj in favoriteStory array and remove
+  async removeFavoriteStory(story){
+    console.debug("removeFavoriteStory input", story);
+    //Find story in favoriteStory array and remove
     
-    this.favorites = (this.favorites.filter(story => { 
-      return story.storyId !== storyObj.storyId}));
+    this.favorites = (this.favorites.filter(favoriteStory => { 
+      return favoriteStory.storyId !== story.storyId}));
     
     // Update un-favorite story in API
     await axios.delete(
-      `${BASE_URL}/users/${this.username}/favorites/${storyObj.storyId}`, 
+      `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`, 
       {params: {token: this.loginToken}});
    
   }
+  isFavorite(story) {
+    return this.favorites.some(favoriteStory => favoriteStory.storyId === story.storyId);
+  }
 }
+
